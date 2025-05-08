@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth transitions */
+.fixed {
+    transition: transform 0.3s ease;
+  }
+  
