@@ -1,4 +1,5 @@
 // src/components/TrackItem.tsx
+import { useMusic } from '../MusicContext';
 import { Track } from '../types/types';
 
 interface TrackItemProps {
@@ -20,6 +21,9 @@ const TrackItem = ({
   isInDraft = false,
   className = '' 
 }: TrackItemProps) => {
+  
+  const {setCurrentTrack, addToDraft } = useMusic()
+
   return (
     <div className={`flex items-center justify-between p-3 rounded-lg ${className} ${
       mode === 'search' && isInDraft ? 'bg-gray-800/50' : 'bg-gray-800'
@@ -32,7 +36,7 @@ const TrackItem = ({
       </div>
       {/* Play Button */}
       <button 
-        onClick={() => onPlay?.(track)}
+        onClick={() => setCurrentTrack(track)}
         className="text-gray-400 hover:text-white flex-shrink-0"
         aria-label="Play track"
         >

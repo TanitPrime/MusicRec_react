@@ -78,7 +78,6 @@ const CreatePlaylistPage = () => {
                 </p>
             )}
         </div>
-        <PlayerControls track={currentTrack} />
     </div>
   );
 };

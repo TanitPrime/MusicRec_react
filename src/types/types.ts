@@ -8,6 +8,7 @@ export interface Track {
 }
 
 export interface Playlist {
+  id: string;
   name: string;
   num_tracks: number;
   num_followers?: number;

@@ -1,17 +1,29 @@
 // src/components/PlaylistCard.tsx
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { Playlist , Track} from '../types/types';
 import { Link } from 'react-router-dom';
 import TrackItem from './TrackItem';
+import { useMusic } from '../MusicContext';
 
 interface PlaylistCardProps {
-  playlist: Playlist;
-  onPlayTrack: (track: Track) => void;
+  id: string;
 }
 
-const PlaylistCard = ({ playlist , onPlayTrack}: PlaylistCardProps) => {
+const PlaylistCard = ({id}: PlaylistCardProps) => {
+  const {loadPlaylists, playlists} = useMusic()
   const [isExpanded, setIsExpanded] = useState(false);
-  const sampleTracks = Object.values(playlist.tracks).slice(0, 4);
+  const [playlist, setPlaylist] = useState<Playlist>(playlists[0])
+
+  useEffect(()=>{
+    loadPlaylists()
+    playlists.filter((playlist)=>{
+      if (playlist.id == id){
+        setPlaylist(playlist)
+      }
+
+    })
+    const sampleTracks = Object.values(playlist.tracks).slice(0, 4);
+  }, []);
 
   return (
     <div className={`bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 ${isExpanded ? 'shadow-lg' : ''}`}>
@@ -62,7 +74,6 @@ const PlaylistCard = ({ playlist , onPlayTrack}: PlaylistCardProps) => {
               <TrackItem 
                 key={track.track_id}
                 track={track}
-                onPlay={onPlayTrack}
                 mode="search" 
                 className="bg-gray-700/50 rounded p-2"
               />
@@ -72,7 +83,7 @@ const PlaylistCard = ({ playlist , onPlayTrack}: PlaylistCardProps) => {
           <div className="mt-4">
             <Link
               to="/recommendations"
-              state={{ playlist }}
+              state={{ playlist}}
               className="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-2 rounded-lg"
               onClick={(e) => e.stopPropagation()}
             >

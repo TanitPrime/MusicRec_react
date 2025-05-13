@@ -1,19 +1,24 @@
 // src/pages/RecommendationsPage.tsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TrackItem from '../components/TrackItem';
-import PlayerControls from '../components/PlayerControls';
 import { useApi } from '../hooks/useApi';
-import { api } from '../api/client';
 import { Track, Playlist } from '../types/types';
-import { ApiRecommendationResponse } from '../api/client';
+import { createApiClient } from '../api/client';
+import { useMusic } from '../MusicContext';
 
 
 const RecommendationsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { callApi, loading, error } = useApi();
-  
+  const {apiUrl} = useMusic()
+  const api = useMemo(() => createApiClient(apiUrl), [apiUrl]); // Only recreate when apiUrl changes
+
+  // Add early return if API URL isn't ready
+  if (!apiUrl) {
+    return <div className="p-4 text-center">Connecting to API server...</div>;
+  }  
   const [recommendations, setRecommendations] = useState<Track[]>([]);
   const [sourcePlaylist, setSourcePlaylist] = useState<Playlist | null>(null);
   const [draftPlaylist, setDraftPlaylist] = useState<Record<string, Track>>({});
@@ -26,7 +31,7 @@ const RecommendationsPage = () => {
   };
 
   const loadRecommendations = (trackIds: string[], playlistName: string) => {
-    callApi<ApiRecommendationResponse>(
+    callApi<any>(
       () => api.recommend(trackIds, playlistName),
       (responseData) => {
         // responseData is now guaranteed to have recommendations array
@@ -40,7 +45,7 @@ const RecommendationsPage = () => {
     if (location.state?.playlist && !hasFetched.current) {
       hasFetched.current = true;
       setSourcePlaylist(location.state.playlist);
-      const trackIds = Object.keys(location.state.playlist.tracks);
+      const trackIds = location.state.playlist.tracks.map(({track_id})=>track_id);
       loadRecommendations(trackIds, location.state.playlist.name);
     }
   }, [location]);
@@ -146,8 +151,6 @@ const RecommendationsPage = () => {
                 </p>
             )}
         </div>
-
-      <PlayerControls track={currentTrack} />
     </div>
   );
 };

@@ -1,8 +1,9 @@
 // src/components/PlaylistBuilder.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import TrackItem from './TrackItem';
-import { api } from '../api/client';
+import { createApiClient } from '../api/client';
 import { Track, PaginatedTracks } from '../types/types';
+import { useMusic } from '../MusicContext';
 
 interface PlaylistBuilderProps {
   onDraftUpdate: (tracks: Record<string, Track>) => void;
@@ -27,9 +28,17 @@ export const PlaylistBuilder = ({ onDraftUpdate, currentDraft, onNameChange, pla
     totalPages: 1
   });
   const [tracks, setTracks] = useState<Track[]>([]);
+  const {apiUrl} = useMusic()
+  const api = useMemo(() => createApiClient(apiUrl), [apiUrl]); // Only recreate when apiUrl changes
+
+  // Add early return if API URL isn't ready
+  if (!apiUrl) {
+    return <div className="p-4 text-center">Connecting to API server...</div>;
+  }
 
 // Fetch all songs (paginated)
 const fetchSongs = async (page: number, perPage: number) => {
+
     setIsLoading(true);
     try {
       const response = await api.getAllSongs(page, perPage);
