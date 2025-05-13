@@ -1,6 +1,6 @@
 // src/components/PlaylistCard.tsx
 import { useState , useEffect} from 'react';
-import { Playlist , Track} from '../types/types';
+import { Playlist } from '../types/types';
 import { Link } from 'react-router-dom';
 import TrackItem from './TrackItem';
 import { useMusic } from '../MusicContext';
@@ -22,7 +22,6 @@ const PlaylistCard = ({id}: PlaylistCardProps) => {
       }
 
     })
-    const sampleTracks = Object.values(playlist.tracks).slice(0, 4);
   }, []);
 
   return (

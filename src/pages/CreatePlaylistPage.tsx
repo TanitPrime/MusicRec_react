@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlaylistBuilder from '../components/PlaylistBuilder';
 import { Track } from '../types/types';
-import PlayerControls from '../components/PlayerControls';
+import { useMusic } from '../MusicContext';
 
 const CreatePlaylistPage = () => {
   const navigate = useNavigate();
   const [draftPlaylist, setDraftPlaylist] = useState<Record<string, Track>>({});
   const [playlistName, setPlaylistName] = useState('Custom Playlist');
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const {setCurrentTrack} = useMusic()
 
 
   const handlePlayTrack = (track: Track) => {

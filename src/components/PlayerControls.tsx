@@ -1,9 +1,6 @@
-import { Track } from '../types/types';
 import { useMusic } from '../MusicContext';
 
-interface PlayerControlsProps {
-  track: Track | null;
-}
+
 
 const PlayerControls = () => {
     const { currentTrack } = useMusic();

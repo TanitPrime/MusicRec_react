@@ -1,9 +1,15 @@
 {
+  "homepage": "https://TanitPrime.github.io/MusicRec_react/",
   "name": "music-recommender-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "start": "vite dev",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

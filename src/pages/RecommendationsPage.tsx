@@ -22,8 +22,7 @@ const RecommendationsPage = () => {
   const [recommendations, setRecommendations] = useState<Track[]>([]);
   const [sourcePlaylist, setSourcePlaylist] = useState<Playlist | null>(null);
   const [draftPlaylist, setDraftPlaylist] = useState<Record<string, Track>>({});
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
-
+  const {setCurrentTrack} = useMusic()
   const hasFetched = useRef(false);
 
   const handlePlayTrack = (track: Track) => {
@@ -42,10 +41,16 @@ const RecommendationsPage = () => {
   };
 
   useEffect(() => {
+      // 1. Check if state exists and has the expected structure
+      if (!location.state?.playlist?.tracks) {
+        console.error('Invalid playlist data:', location.state);
+        return; // Exit early if data is missing
+      }
+
     if (location.state?.playlist && !hasFetched.current) {
       hasFetched.current = true;
       setSourcePlaylist(location.state.playlist);
-      const trackIds = location.state.playlist.tracks.map(({track_id})=>track_id);
+      const trackIds = Object.keys(location.state.playlist.tracks);
       loadRecommendations(trackIds, location.state.playlist.name);
     }
   }, [location]);

@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import TrackItem from './TrackItem';
 import { createApiClient } from '../api/client';
-import { Track, PaginatedTracks } from '../types/types';
+import { Track } from '../types/types';
 import { useMusic } from '../MusicContext';
 
 interface PlaylistBuilderProps {
@@ -15,12 +15,9 @@ interface PlaylistBuilderProps {
 
 export const PlaylistBuilder = ({ onDraftUpdate, currentDraft, onNameChange, playlistName, onPlayTrack }: PlaylistBuilderProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [spotifyAuth, setSpotifyAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<Track[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-  const [isSearching, setIsSearching] = useState(false);
+  const [currentPage] = useState(1);
+  const [perPage] = useState(20);
   const [pagination, setPagination] = useState({
     page: 1,
     perPage: 20,

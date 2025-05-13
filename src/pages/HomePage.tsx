@@ -1,13 +1,11 @@
 // src/pages/HomePage.tsx
-import { Playlist, Track } from '../types/types';
 import PlaylistCard from '../components/PlaylistCard';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMusic } from '../MusicContext';
 
 
 const HomePage = () =>{
-  const [loading, setLoading] = useState(true);
   const {playlists, loadPlaylists} = useMusic()
   
   useEffect(()=>{

@@ -17,12 +17,11 @@ const TrackItem = ({
   mode, 
   onAdd, 
   onRemove, 
-  onPlay,
   isInDraft = false,
   className = '' 
 }: TrackItemProps) => {
   
-  const {setCurrentTrack, addToDraft } = useMusic()
+  const {setCurrentTrack } = useMusic()
 
   return (
     <div className={`flex items-center justify-between p-3 rounded-lg ${className} ${
